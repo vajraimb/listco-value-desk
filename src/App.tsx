@@ -58,7 +58,7 @@ export default function App() {
       </main>
 
       <SettingsSheet open={settingsOpen} onOpenChange={setSettingsOpen} api={api} />
-      <Toaster position="bottom-right" />
+      <Toaster position="bottom-right" theme={theme === 'dark' ? 'dark' : 'light'} />
     </div>
   )
 }

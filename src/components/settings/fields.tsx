@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
@@ -68,13 +68,14 @@ export function NumericField({
   const toText = percent ? toPercentInput : toNumberInput
   const fromText = percent ? fromPercentInput : fromNumberInput
   const [text, setText] = useState(() => toText(value))
-  const textRef = useRef(text)
-  textRef.current = text
+  const [seen, setSeen] = useState(value)
 
-  // Keep typing intact locally, but follow imports and resets from outside.
-  useEffect(() => {
-    if (fromText(textRef.current) !== value) setText(toText(value))
-  }, [value, fromText, toText])
+  // Keep half-typed text intact locally, but follow imports and resets from
+  // outside: only rewrite the box when the incoming value really changed.
+  if (value !== seen) {
+    setSeen(value)
+    if (fromText(text) !== value) setText(toText(value))
+  }
 
   return (
     <FieldShell label={label} hint={hint}>

@@ -1,0 +1,142 @@
+{
+  "schema": "listco-value-desk.watchlist.v1",
+  "skill": "listed_co_marketcap_vs_dcf.v1.1",
+  "version": "v1.1",
+  "title": "估值边界看板",
+  "asOf": "2026-08-25",
+  "priceAnchor": "2026-08-24 美股收盘",
+  "currency": "USD",
+  "disclaimer": "风险边界，不是买卖建议。",
+  "researchNote": "数字锁定于基准日，未另作研究。",
+  "positions": [
+    {
+      "id": "fn",
+      "ticker": "FN",
+      "name": "Fabrinet",
+      "exchange": "NYSE",
+      "spot": 421.14,
+      "cost": 522,
+      "bear": 79.48,
+      "base": 306.34,
+      "bull": 610,
+      "multiple": 1.36,
+      "tvEv": 0.884,
+      "impliedRev": 13.64,
+      "horizonYear": "FY2031",
+      "cagr": 0.241,
+      "grossMargin": 0.12,
+      "tam": [
+        { "id": "fn-tam-1", "label": "制造 SAM", "share": 0.187, "verdict": "紧" },
+        { "id": "fn-tam-2", "label": "模块 ASP", "share": 0.12, "verdict": "可行" }
+      ],
+      "triggers": [
+        { "id": "fn-trg-1", "text": "连续两季 GM < 11.5%" },
+        { "id": "fn-trg-2", "text": "Q1FY27 收入 < $1.375B" },
+        { "id": "fn-trg-3", "text": "前四大（CSCO / NVDA / NOK / AMZN 合计 57%）公开丢单" },
+        { "id": "fn-trg-4", "text": "OCF 连续两季为负" }
+      ]
+    },
+    {
+      "id": "alab",
+      "ticker": "ALAB",
+      "name": "Astera Labs",
+      "exchange": "NASDAQ",
+      "spot": 277.53,
+      "cost": null,
+      "bear": 31.92,
+      "base": 76.75,
+      "bull": 139.01,
+      "multiple": 3.39,
+      "tvEv": 0.792,
+      "impliedRev": 19.17,
+      "horizonYear": "2030E",
+      "cagr": 0.864,
+      "grossMargin": 0.73,
+      "tam": [
+        { "id": "alab-tam-1", "label": "scale-up", "share": 0.96, "verdict": "不可行" },
+        { "id": "alab-tam-2", "label": "PCIe retimer", "share": 7.72, "verdict": "不可行" }
+      ],
+      "triggers": [
+        { "id": "alab-trg-1", "text": "Q3 收入 < $540m" },
+        { "id": "alab-trg-2", "text": "GM < 70%" },
+        { "id": "alab-trg-3", "text": "Scorpio 未成最大产品线" }
+      ]
+    },
+    {
+      "id": "ttmi",
+      "ticker": "TTMI",
+      "name": "TTM Technologies",
+      "exchange": "NASDAQ",
+      "spot": 107.12,
+      "cost": null,
+      "bear": 10.3,
+      "base": 67.53,
+      "bull": 139.86,
+      "multiple": 1.55,
+      "tvEv": 0.863,
+      "impliedRev": 10.86,
+      "horizonYear": "2030E",
+      "cagr": 0.302,
+      "grossMargin": 0.207,
+      "tam": [
+        { "id": "ttmi-tam-1", "label": "全球 PCB", "share": 0.088, "verdict": "可行" },
+        { "id": "ttmi-tam-2", "label": "高速切片", "share": 0.32, "verdict": "紧" }
+      ],
+      "triggers": [
+        { "id": "ttmi-trg-1", "text": "GM 掉出约 21% 带" },
+        { "id": "ttmi-trg-2", "text": "AI 数据中心或航电需求明显走弱" },
+        { "id": "ttmi-trg-3", "text": "收购后杠杆 / 利息覆盖恶化" }
+      ]
+    }
+  ],
+  "hedges": {
+    "title": "股票不能买不能卖时的降风险",
+    "note": "以下不是买卖建议。只列出仓位无法进出场时的工具与适用情境。",
+    "items": [
+      {
+        "id": "hedge-a",
+        "title": "保护性 put",
+        "subtitle": "ALAB 优先",
+        "lines": [
+          "股票不能卖出时，用 put 把下行锁在行权价。",
+          "ALAB 落在叙事越界带，回撤空间最大，优先级最高。",
+          "FN 要保的是 421 的现价，不是 522 的成本 —— 成本不是市场的锚。",
+          "代价：权利金；到期后保护消失。"
+        ]
+      },
+      {
+        "id": "hedge-b",
+        "title": "领口 collar",
+        "subtitle": "买 put 卖 call",
+        "lines": [
+          "买 put 加卖 call，用上行换更低的净成本。",
+          "FN 的 call 可以放在 522 附近：让出成本价以上的上行，换 421 附近的保护。",
+          "ALAB 卖 call 要谨慎，叙事带的反弹会直接吃掉上行。",
+          "代价：放弃 call 行权价以上的收益。"
+        ]
+      },
+      {
+        "id": "hedge-c",
+        "title": "认沽价差 put spread",
+        "subtitle": "便宜但有下限",
+        "lines": [
+          "买近端 put、卖远端 put，只覆盖一段下行区间。",
+          "适合判断「会回到 base 附近，但不确定何时」的情形。",
+          "跌穿下端行权价之后不再增加保护。",
+          "代价：保护有上限，换更低的权利金。"
+        ]
+      },
+      {
+        "id": "hedge-d",
+        "title": "指数对冲",
+        "subtitle": "SMH / SOX / XSD",
+        "lines": [
+          "用半导体指数的 put 或空头覆盖行业层面的回撤。",
+          "单腿成本通常低于三只个股分别对冲。",
+          "留下基差风险：个股叙事破裂时指数不一定同步下跌。",
+          "代价：对不准单只标的的证伪路径。"
+        ]
+      }
+    ]
+  }
+}

@@ -1,4 +1,4 @@
-import { fmtAxis } from '@/lib/format'
+import { fmtAxis, fmtMark } from '@/lib/format'
 import type { PositionView } from '@/lib/valuation'
 
 const SEGMENT_COLOR: Record<string, string> = {
@@ -32,7 +32,7 @@ export function BandBar({ view }: { view: PositionView }) {
             className="absolute whitespace-nowrap text-[0.6875rem] text-muted-foreground"
             style={{ ...anchor(costMark.pct), top: stacked ? 0 : '0.25rem' }}
           >
-            <span className="num">成本 {fmtAxis(costMark.value)}</span>
+            <span className="num">成本 {fmtMark(costMark.value)}</span>
             <span className="ml-1 text-[0.5rem] align-middle">◆</span>
           </div>
         )}
@@ -40,7 +40,7 @@ export function BandBar({ view }: { view: PositionView }) {
           className="absolute whitespace-nowrap text-[0.6875rem] font-medium"
           style={{ ...anchor(spotMark.pct), top: stacked ? '1.25rem' : '0.25rem' }}
         >
-          <span className="num">现 {fmtAxis(spotMark.value)}</span>
+          <span className="num">现 {fmtMark(spotMark.value)}</span>
           <span className="ml-1 text-[0.5rem] align-middle">▼</span>
         </div>
       </div>

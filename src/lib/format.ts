@@ -16,7 +16,13 @@ export function fmtPriceCompact(value: number): string {
   return `$${compactMoney.format(value)}`
 }
 
+/** Boundary ticks keep two decimals so 610.00 and 10.30 line up with 79.48. */
 export function fmtAxis(value: number): string {
+  return money.format(value)
+}
+
+/** Marker labels ride above the bar, so they drop trailing zeros. */
+export function fmtMark(value: number): string {
   return compactMoney.format(value)
 }
 

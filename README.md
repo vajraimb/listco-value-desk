@@ -52,6 +52,26 @@ Node 20 以上。没有后端、没有行情接口：价格是基准日锚定的
 导入时字段会被规整（缺项补默认、数字容错、TAM 判定回落到「紧」），非法 JSON 会报错而不会
 把看板改坏。
 
+## 部署到 GitHub Pages
+
+`.github/workflows/deploy.yml` 在每次推送 `main` 时构建并发布到 Pages：
+
+- 站点地址由仓库名决定。项目仓库发布在 `https://<用户名>.github.io/<仓库名>/`，
+  名为 `<用户名>.github.io` 的用户站点仓库发布在域名根路径。
+- 资源前缀不用手改：工作流把 `actions/configure-pages` 算出的 `base_path` 传给
+  `VITE_BASE`，`vite.config.ts` 读它当 `base`，本地开发仍是 `/`。
+- 首次部署前需要在仓库 Settings → Pages → Build and deployment → Source 选
+  **GitHub Actions**（这一步只能由仓库管理员做，工作流自带的 token 没有这个权限）。
+
+本地想验证子路径下的构建：
+
+```bash
+VITE_BASE=/仓库名 npm run build && npm run preview
+```
+
+看板是纯静态页，没有服务端：改数字就是改 `data/watchlist.json` 后推一次，Pages 会重建。
+访客本地 `localStorage` 里的改动仍然优先于新发布的文件，除非他们点「恢复内置基准」。
+
 ## 目录
 
 ```

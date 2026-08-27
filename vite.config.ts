@@ -4,6 +4,9 @@ import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
+  // GitHub Pages serves a project site under /<repo>/; the Pages workflow
+  // passes that prefix in, and a root deploy or local dev keeps '/'.
+  base: process.env.VITE_BASE || '/',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {

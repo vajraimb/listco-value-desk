@@ -87,6 +87,7 @@ function normalizePosition(raw: unknown, index: number): Position {
     triggers: Array.isArray(row.triggers)
       ? row.triggers.map((item) => normalizeTrigger(item, id)).filter((item) => item.text !== '')
       : [],
+    notes: Array.isArray(row.notes) ? row.notes.map((item) => str(item)).filter(Boolean) : [],
   }
 }
 
@@ -155,6 +156,55 @@ export function serializeWatchlist(watchlist: Watchlist): string {
   return `${JSON.stringify(watchlist, null, 2)}\n`
 }
 
+function tickerKey(ticker: string): string {
+  return ticker.trim().toUpperCase()
+}
+
+/** True when the row is a newly added shell: code maybe filled, DCF and research not. */
+export function isShellPosition(position: Position): boolean {
+  return (
+    position.bear === 0 &&
+    position.base === 0 &&
+    position.bull === 0 &&
+    position.tam.length === 0 &&
+    position.triggers.length === 0 &&
+    position.multiple === null &&
+    position.impliedRev === null
+  )
+}
+
+/**
+ * Local edits win, but a later seed (new ticker, or a shell the desk added in
+ * settings) must still receive the checked-in research. Cost on the local row
+ * is kept; id is kept so the open editor does not remount.
+ */
+export function hydrateFromSeed(stored: Watchlist, seed: Watchlist): Watchlist {
+  const seedByTicker = new Map(
+    seed.positions
+      .map((position) => [tickerKey(position.ticker), position] as const)
+      .filter(([ticker]) => ticker !== ''),
+  )
+  const seen = new Set<string>()
+  const positions = stored.positions.map((local) => {
+    const key = tickerKey(local.ticker)
+    const seeded = key === '' ? undefined : seedByTicker.get(key)
+    if (!seeded) return local
+    seen.add(key)
+    if (!isShellPosition(local)) return local
+    return {
+      ...seeded,
+      id: local.id,
+      cost: local.cost !== null ? local.cost : seeded.cost,
+    }
+  })
+  for (const seeded of seed.positions) {
+    const key = tickerKey(seeded.ticker)
+    if (key === '' || seen.has(key)) continue
+    positions.push(seeded)
+  }
+  return { ...stored, positions }
+}
+
 /** Data problems worth surfacing in the editor; none of these block rendering. */
 export function positionIssues(position: Position): string[] {
   const issues: string[] = []
@@ -186,5 +236,6 @@ export function blankPosition(): Position {
     grossMargin: null,
     tam: [],
     triggers: [],
+    notes: [],
   }
 }

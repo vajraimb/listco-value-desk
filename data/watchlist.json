@@ -7,7 +7,7 @@
   "priceAnchor": "2026-08-24 美股收盘",
   "currency": "USD",
   "disclaimer": "风险边界，不是买卖建议。",
-  "researchNote": "数字锁定于基准日，未另作研究。",
+  "researchNote": "FN / ALAB / TTMI 边界锁定于 2026-08-25；VEEV 为 2026-08-28 补入。现价按 Alpaca 美股最新成交刷新，DCF 边界不随行情改。",
   "positions": [
     {
       "id": "fn",
@@ -86,6 +86,33 @@
         { "id": "ttmi-trg-1", "text": "GM 掉出约 21% 带" },
         { "id": "ttmi-trg-2", "text": "AI 数据中心或航电需求明显走弱" },
         { "id": "ttmi-trg-3", "text": "收购后杠杆 / 利息覆盖恶化" }
+      ]
+    },
+    {
+      "id": "veev",
+      "ticker": "VEEV",
+      "name": "Veeva Systems",
+      "exchange": "NYSE",
+      "spot": 282.13,
+      "cost": null,
+      "bear": 173.06,
+      "base": 280.55,
+      "bull": 422.36,
+      "multiple": 1.01,
+      "tvEv": 0.792,
+      "impliedRev": 6.05,
+      "horizonYear": "2030E",
+      "cagr": 0.13,
+      "grossMargin": 0.75,
+      "tam": [
+        { "id": "veev-tam-1", "label": "生命科学 TAM（公司口径 $20B+）", "share": 0.303, "verdict": "紧" },
+        { "id": "veev-tam-2", "label": "2030 成长后 TAM（~$26B）", "share": 0.236, "verdict": "可行" }
+      ],
+      "triggers": [
+        { "id": "veev-trg-1", "text": "连续两季订阅增速 < 10%" },
+        { "id": "veev-trg-2", "text": "Vault CRM 前20大承诺停在 12 家，或出现公开回迁 Salesforce" },
+        { "id": "veev-trg-3", "text": "FY27 收入 < $3.60B（指引 $3.68B）" },
+        { "id": "veev-trg-4", "text": "总毛利率 < 72%（现约 75%）" }
       ]
     }
   ],

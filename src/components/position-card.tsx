@@ -128,6 +128,19 @@ export function PositionCard({ view }: { view: PositionView }) {
           </div>
         )}
 
+        {position.notes.length > 0 && (
+          <div className="border-t border-rule pt-2.5">
+            <div className="label-caps">公告摘录</div>
+            <ul className="mt-1.5 space-y-1">
+              {position.notes.map((note) => (
+                <li key={note} className="text-[0.75rem] leading-relaxed text-foreground/85">
+                  {note}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         {position.triggers.length > 0 && (
           <div
             className="mt-auto rounded-[2px] border-l-2 p-2.5"

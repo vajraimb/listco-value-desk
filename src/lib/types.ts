@@ -40,6 +40,8 @@ export interface Position {
   grossMargin: number | null
   tam: TamRow[]
   triggers: TriggerRow[]
+  /** Extracted from 8-K / 10-K: guidance, TAM, management KPIs. */
+  notes: string[]
 }
 
 export interface HedgeItem {

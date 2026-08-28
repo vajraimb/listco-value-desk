@@ -96,17 +96,20 @@ export function SettingsSheet({ open, onOpenChange, api }: SettingsSheetProps) {
                   index={index}
                   total={watchlist.positions.length}
                   expanded={expandedId === position.id}
+                  researching={api.researchingIds.includes(position.id)}
+                  researchError={api.researchErrors[position.id]}
                   onToggle={() =>
                     setExpandedId((current) => (current === position.id ? null : position.id))
                   }
                   onPatch={(patch) => api.patchPosition(position.id, patch)}
+                  onResearch={() => api.researchPosition(position.id)}
                   onMove={(direction) => api.movePosition(position.id, direction)}
                   onRemove={() => api.removePosition(position.id)}
                 />
               ))}
               {watchlist.positions.length === 0 && (
                 <p className="rounded-[3px] border border-dashed border-rule-strong px-3 py-6 text-center text-[0.75rem] text-muted-foreground">
-                  看板是空的。加一个标的，填上现价与 bear / base / bull 三条边界。
+                  看板是空的。加一个标的，填上美股代码，现价和 DCF 边界会自动跑出来。
                 </p>
               )}
               <Button

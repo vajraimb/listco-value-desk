@@ -2,6 +2,7 @@ import { ChevronDown, ChevronUp, Plus, Trash2 } from 'lucide-react'
 import { NumericField, TextField } from '@/components/settings/fields'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import {
   Select,
   SelectContent,
@@ -20,8 +21,11 @@ interface PositionEditorProps {
   index: number
   total: number
   expanded: boolean
+  researching?: boolean
+  researchError?: string
   onToggle: () => void
   onPatch: (patch: Partial<Position>) => void
+  onResearch: () => void
   onMove: (direction: -1 | 1) => void
   onRemove: () => void
 }
@@ -31,8 +35,11 @@ export function PositionEditor({
   index,
   total,
   expanded,
+  researching = false,
+  researchError,
   onToggle,
   onPatch,
+  onResearch,
   onMove,
   onRemove,
 }: PositionEditorProps) {
@@ -112,11 +119,29 @@ export function PositionEditor({
             </p>
           )}
 
+          {researchError && (
+            <p
+              className="rounded-[2px] px-2 py-1 text-[0.6875rem]"
+              style={{
+                background: 'var(--band-overshoot-tint)',
+                color: 'var(--band-overshoot)',
+              }}
+            >
+              {researchError}
+            </p>
+          )}
+          {researching && (
+            <p className="text-[0.6875rem] text-muted-foreground">
+              正在拉美股现价、财报并跑三情景 DCF…
+            </p>
+          )}
+
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
             <TextField
               label="代码"
+              hint="输入后自动研究"
               value={position.ticker}
-              placeholder="FN"
+              placeholder="VEEV"
               onChange={(value) => onPatch({ ticker: value.toUpperCase() })}
             />
             <TextField
@@ -161,10 +186,21 @@ export function PositionEditor({
               onChange={(bull) => onPatch({ bull: bull ?? 0 })}
             />
           </div>
-          <p className="text-[0.625rem] text-muted-foreground">
-            带位由现价与三条边界重算：当前 <span style={{ color: 'var(--band)' }}>{meta.label}</span>
-            （{meta.rule}）。颜色不可手填。
-          </p>
+          <div className="flex flex-wrap items-center gap-2">
+            <p className="text-[0.625rem] text-muted-foreground">
+              带位由现价与三条边界重算：当前 <span style={{ color: 'var(--band)' }}>{meta.label}</span>
+              （{meta.rule}）。颜色不可手填。
+            </p>
+            <Button
+              variant="outline"
+              size="sm"
+              className="ml-auto h-7 text-[0.6875rem]"
+              disabled={researching || position.ticker.trim() === ''}
+              onClick={onResearch}
+            >
+              {researching ? '研究中…' : '重新跑一遍'}
+            </Button>
+          </div>
 
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
             <NumericField
@@ -327,6 +363,21 @@ export function PositionEditor({
                 </Button>
               </div>
             ))}
+          </div>
+
+          <div className="space-y-1 border-t border-rule pt-2.5">
+            <span className="label-caps">公告摘录 · 一行一条</span>
+            <Textarea
+              value={position.notes.join('\n')}
+              rows={4}
+              placeholder="指引、TAM、管理层原话"
+              onChange={(event) =>
+                onPatch({
+                  notes: event.target.value.split('\n'),
+                })
+              }
+              className="text-[0.8125rem]"
+            />
           </div>
         </div>
       )}

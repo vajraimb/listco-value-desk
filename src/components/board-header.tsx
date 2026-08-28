@@ -1,5 +1,6 @@
 import { Moon, Settings2, SunMedium } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import type { QuotesStatus } from '@/hooks/use-live-quotes'
 import type { Theme } from '@/lib/storage'
 import type { Watchlist } from '@/lib/types'
 
@@ -7,14 +8,22 @@ interface BoardHeaderProps {
   watchlist: Watchlist
   theme: Theme
   isEdited: boolean
+  quotesStatus: QuotesStatus
   onToggleTheme: () => void
   onOpenSettings: () => void
+}
+
+const QUOTE_LABEL: Record<QuotesStatus, string> = {
+  loading: 'Alpaca 拉取中',
+  live: 'Alpaca 美股',
+  stale: '内置基准价',
 }
 
 export function BoardHeader({
   watchlist,
   theme,
   isEdited,
+  quotesStatus,
   onToggleTheme,
   onOpenSettings,
 }: BoardHeaderProps) {
@@ -31,6 +40,9 @@ export function BoardHeader({
           <span className="text-[0.75rem] text-muted-foreground">
             基准日 <span className="num">{watchlist.asOf || '未填'}</span>
             {watchlist.priceAnchor && `（行情锚 ${watchlist.priceAnchor}）`}
+          </span>
+          <span className="rounded-[2px] bg-muted px-1.5 py-px text-[0.625rem] text-muted-foreground">
+            {QUOTE_LABEL[quotesStatus]}
           </span>
           {isEdited && (
             <span className="rounded-[2px] bg-muted px-1.5 py-px text-[0.625rem] text-muted-foreground">
